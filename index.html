@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Souvik Bose is a researcher at the University of Oslo working on heating of the solar atmosphere, machine learning for solar observations, and AI interpretability.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Souvik Bose">
+<meta property="og:description" content="Souvik Bose is a researcher at the University of Oslo working on heating of the solar atmosphere, machine learning for solar observations, and AI interpretability.">
+<meta property="og:image" content="https://souvikita.github.io/images/portrait.jpg">
+<meta name="twitter:card" content="summary">
+<title>Souvik Bose | Solar physics and AI interpretability</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one quiet column (max 1120px), left-aligned, mono eyebrows, H-alpha red as the single accent. */
+/* Layout: one quiet column on deep navy; type and spacing do the work, no boxes. Single dark theme by design. */
+:root {
+  color-scheme: dark;
+  --bg: #0B1220;
+  --surface: #0B1220;
+  --fg: #E6EAF1;
+  --muted: #98A4B7;
+  --faint: #6B778B;
+  --line: rgba(230, 234, 241, 0.10);
+  --accent: #E3B873;
+  --accent-soft: rgba(227, 184, 115, 0.12);
+  --band: #111A2C;
+  --band-fg: #E6EAF1;
+  --band-muted: #98A4B7;
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: inherit; text-decoration: none; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+img { max-width: 100%; display: block; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.ext::after { content: " ↗"; font-size: 0.85em; color: var(--faint); }
+.link { color: var(--accent); font-weight: 500; }
+.link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.mono { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Header */
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 17px; white-space: nowrap; }
+.brand span { color: var(--accent); }
+nav { display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+nav::-webkit-scrollbar { display: none; }
+nav a { font-size: 14px; color: var(--muted); white-space: nowrap; padding-block: 4px; }
+nav a:hover { color: var(--fg); }
+
+/* Hero */
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding-block: clamp(44px, 7vw, 88px) 36px; }
+.hero h1 { font-size: clamp(42px, 6.4vw, 76px); font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+.hero .role { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 26px); font-weight: 500; color: var(--muted); margin-top: 14px; }
+.hero .lede { font-size: clamp(18px, 1.8vw, 21px); line-height: 1.5; max-width: 34em; margin-top: 26px; }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 6px; font-weight: 600; font-size: 15px; border: 1px solid var(--line); background: var(--surface); transition: border-color .15s, background .15s; }
+.btn:hover { border-color: var(--fg); }
+.btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.now { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; font-size: 15px; }
+.now .eyebrow { padding-top: 3px; }
+.now ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; color: var(--muted); }
+.now li strong { color: var(--fg); font-weight: 500; }
+
+.portrait { position: relative; aspect-ratio: 4 / 5; max-width: 100%; border-radius: 8px; overflow: hidden; background: var(--band); color: var(--band-fg); border: 1px solid var(--line); }
+.portrait img { width: 100%; height: 100%; object-fit: cover; }
+.portrait .placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; }
+.portrait .placeholder .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(56px, 7vw, 96px); line-height: 0.9; letter-spacing: -0.04em; color: var(--band-fg); opacity: 0.92; }
+.portrait .placeholder .note { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--band-muted); }
+.portrait svg.lines { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.35; }
+
+/* Spectral strip */
+.spectrum { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.spectrum .wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: center; padding-block: 10px; }
+.spectrum svg { width: 100%; max-width: 100%; height: 56px; display: block; }
+.spectrum .lbl { font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--muted); letter-spacing: 0.06em; min-width: 0; }
+.spectrum .lbl b { color: var(--fg); font-weight: 500; }
+
+/* Featured band */
+.featured { background: var(--band); color: var(--band-fg); }
+.featured .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 48px; align-items: center; padding-block: 28px; }
+.featured .eyebrow { color: var(--band-muted); }
+.featured h2 { font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; margin-top: 8px; line-height: 1.25; }
+.featured p { color: var(--band-muted); margin-top: 8px; font-size: 15.5px; max-width: 60em; }
+.featured .btn { background: transparent; color: var(--band-fg); border-color: rgba(255,255,255,0.28); }
+.featured .btn:hover { border-color: var(--band-fg); background: rgba(255,255,255,0.06); }
+
+/* Sections */
+section.block { padding-block: clamp(56px, 7vw, 96px); border-bottom: 1px solid var(--line); }
+section.block:last-of-type { border-bottom: 0; }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: end; margin-bottom: clamp(28px, 4vw, 44px); }
+.sec-head h2 { font-size: clamp(30px, 3.6vw, 42px); font-weight: 700; margin-top: 10px; letter-spacing: -0.02em; }
+.sec-head .aside { color: var(--muted); font-size: 15px; display: flex; gap: 18px; flex-wrap: wrap; }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); }
+.about-grid .q { font-family: var(--font-display); font-size: clamp(22px, 2.6vw, 30px); font-weight: 500; line-height: 1.3; letter-spacing: -0.015em; }
+.about-grid .q em { font-style: normal; color: var(--accent); }
+.prose { display: grid; gap: 18px; max-width: 62ch; }
+.prose p { color: var(--fg); }
+.facts { display: grid; gap: 0; border-top: 1px solid var(--line); align-self: start; }
+.facts div { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding-block: 14px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.facts dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; margin: 0; }
+.facts dd { margin: 0; color: var(--fg); }
+.facts dd .sub { color: var(--muted); display: block; font-size: 14px; }
+
+/* Research */
+.themes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.theme { background: var(--surface); padding: 28px 28px 26px; display: grid; gap: 12px; align-content: start; }
+.theme h3 { font-size: 21px; font-weight: 700; }
+.theme p { color: var(--muted); font-size: 15.5px; }
+.theme .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.theme .tags span { font-family: var(--font-mono); font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; }
+.theme a.link { font-size: 15px; margin-top: 4px; }
+
+/* Publications */
+.pubs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.pub { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px 24px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+.pub .year { font-family: var(--font-mono); font-size: 14px; color: var(--muted); padding-top: 4px; font-variant-numeric: tabular-nums; }
+.pub h3 { font-size: 19px; font-weight: 600; line-height: 1.35; font-family: var(--font-body); letter-spacing: 0; }
+.pub h3 a:hover { color: var(--accent); }
+.pub .meta { color: var(--muted); font-size: 15px; margin-top: 6px; }
+.pub .meta .venue { color: var(--fg); font-weight: 500; }
+.pub .why { margin-top: 10px; font-size: 15.5px; color: var(--fg); max-width: 70ch; }
+.pub .links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-family: var(--font-mono); font-size: 13px; }
+.pub .links a { color: var(--accent); }
+.pub .links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.pub .flag { display: inline-block; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 3px 8px; margin-bottom: 8px; }
+.pubs-foot { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 24px; color: var(--muted); font-size: 15px; align-items: baseline; }
+
+/* Software */
+.repos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.repo { border: 1px solid var(--line); border-radius: 8px; padding: 24px; background: var(--surface); display: grid; gap: 10px; align-content: start; }
+.repo .eyebrow { font-size: 11.5px; }
+.repo h3 { font-size: 19px; font-weight: 700; }
+.repo p { color: var(--muted); font-size: 15px; }
+.repo .path { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.repo a.link { font-size: 15px; margin-top: 2px; }
+.stack { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; color: var(--muted); font-size: 14.5px; }
+.stack .eyebrow { margin-right: 6px; }
+.stack span.item { border-bottom: 1px solid var(--line); }
+
+/* Experience */
+.two-col { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+.timeline { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.timeline li { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 6px 24px; padding-block: 20px; border-bottom: 1px solid var(--line); }
+.timeline .when { font-family: var(--font-mono); font-size: 13.5px; color: var(--muted); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.timeline h3 { font-size: 18px; font-weight: 600; font-family: var(--font-body); letter-spacing: 0; }
+.timeline .org { color: var(--muted); font-size: 15px; margin-top: 2px; }
+.timeline .desc { font-size: 15px; margin-top: 8px; color: var(--fg); max-width: 60ch; }
+.grant { border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; margin-bottom: 32px; }
+.grant .eyebrow { color: var(--accent); }
+.grant h3 { font-size: 20px; font-weight: 700; margin-top: 6px; }
+.grant p { color: var(--muted); font-size: 15px; margin-top: 6px; }
+.side-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.side-list li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.side-list .when { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+.side-list .sub { color: var(--muted); display: block; font-size: 14px; }
+.side-block + .side-block { margin-top: 36px; }
+.side-block h3 { font-size: 14px; font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+/* Activity */
+.activity { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+.activity h3 { font-size: 14px; font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.activity ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 15px; }
+.activity li { padding-left: 14px; position: relative; }
+.activity li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.activity li .sub { color: var(--muted); }
+
+/* Contact */
+.contact .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.contact h2 { font-size: clamp(30px, 3.6vw, 42px); font-weight: 700; margin-top: 10px; letter-spacing: -0.02em; }
+.contact .lead { color: var(--muted); margin-top: 14px; max-width: 40ch; }
+.email { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 26px; }
+.email code { font-family: var(--font-mono); font-size: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; user-select: all; }
+.email button { font: inherit; font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.email button:hover { border-color: var(--fg); }
+.links-grid { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.links-grid li { border-bottom: 1px solid var(--line); }
+.links-grid a { display: flex; justify-content: space-between; gap: 16px; padding-block: 14px; font-size: 16px; }
+.links-grid a span.what { color: var(--muted); font-size: 14px; font-family: var(--font-mono); }
+.links-grid a:hover { color: var(--accent); }
+
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-block: 28px 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: 1fr; align-items: start; }
+  .portrait { max-width: 320px; }
+  .about-grid, .two-col, .contact .wrap { grid-template-columns: 1fr; }
+  .themes { grid-template-columns: 1fr; }
+  .repos { grid-template-columns: 1fr; }
+  .activity { grid-template-columns: 1fr; }
+  .featured .wrap { grid-template-columns: 1fr; }
+  .sec-head { grid-template-columns: 1fr; align-items: start; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .now { grid-template-columns: 1fr; }
+  .pub { grid-template-columns: 1fr; gap: 4px; }
+  .timeline li { grid-template-columns: 1fr; gap: 2px; }
+  .facts div { grid-template-columns: 1fr; gap: 4px; }
+  .spectrum .wrap { grid-template-columns: 1fr; gap: 6px; }
+  .site-header .wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
+  nav { width: 100%; gap: 18px; }
+}
+
+.allpubs { margin-top: clamp(40px, 5vw, 64px); }
+.allpubs h3 { font-size: 22px; font-weight: 700; }
+.allpubs .status { color: var(--muted); font-size: 14px; margin-top: 6px; }
+.allpubs ol { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.allpubs li { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 4px 24px; padding-block: 12px; border-bottom: 1px solid var(--line); font-size: 15.5px; }
+.allpubs li .year { font-family: var(--font-mono); font-size: 13.5px; color: var(--muted); padding-top: 2px; }
+.allpubs li a:hover { color: var(--accent); }
+.allpubs li .j { color: var(--muted); font-size: 14.5px; display: block; }
+@media (max-width: 560px) { .allpubs li { grid-template-columns: 1fr; } }
+
+/* Calmer pass: fewer rules and boxes, tighter sections */
+section.block { border-bottom: 0; padding-block: clamp(40px, 5vw, 68px); }
+.sec-head { margin-bottom: clamp(20px, 3vw, 32px); }
+.sec-head h2 { font-size: clamp(26px, 3vw, 34px); }
+.hero .wrap { padding-block: clamp(36px, 6vw, 72px) 44px; }
+.now { border-top: 0; padding-top: 0; }
+.portrait { border: 0; }
+.btn { background: transparent; }
+.btn.primary { background: var(--fg); color: var(--bg); }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.featured .wrap { padding-block: 26px; }
+.about-grid .q { font-size: clamp(20px, 2.2vw, 26px); }
+.facts { border-top: 0; }
+.facts div { border-bottom: 0; padding-block: 9px; }
+.themes { background: transparent; border: 0; border-radius: 0; gap: 36px 56px; overflow: visible; }
+.theme { background: transparent; padding: 0; gap: 8px; }
+.theme h3 { font-size: 19px; }
+.pubs { border-top: 0; }
+.pub { border-bottom: 0; padding-block: 16px; }
+.pub .flag { background: transparent; padding: 0; margin-bottom: 4px; }
+.repos { gap: 36px 48px; }
+.repo { border: 0; background: transparent; padding: 0; border-radius: 0; }
+.grant { border-left: 0; padding: 0; margin-bottom: 28px; }
+.timeline, .side-list, .links-grid { border-top: 0; }
+.timeline li { border-bottom: 0; padding-block: 14px; }
+.side-list li { border-bottom: 0; padding-block: 8px; }
+.links-grid li { border-bottom: 0; }
+.links-grid a { padding-block: 9px; }
+.email code { background: transparent; }
+.email button { background: transparent; }
+.allpubs { margin-top: 28px; }
+.allpubs summary { cursor: pointer; font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--accent); width: fit-content; }
+.allpubs summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+.allpubs ol { border-top: 0; margin-top: 10px; }
+.allpubs li { border-bottom: 0; padding-block: 8px; }
+</style>
+
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">Souvik Bose<span>.</span></a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#interpretability">Interpretability</a>
+      <a href="#publications">Publications</a>
+      <a href="#software">Software</a>
+      <a href="#background">Background</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Solar physics · Machine learning · AI interpretability</p>
+        <h1 style="margin-top:14px">Souvik Bose</h1>
+        <p class="role">Researcher, Institute of Theoretical Astrophysics, University of Oslo</p>
+        <p class="lede">I study how the Sun's atmosphere is heated, combining high-resolution observations from space and the ground with radiative-MHD simulations, and building machine-learning methods that make those observations more reliable.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#publications">Selected publications</a>
+          <a class="btn" href="#research">Research</a>        </div>
+        <div class="now">
+          <span class="eyebrow">Currently</span>
+          <ul>
+            <li><strong>Principal investigator</strong>, Research Council of Norway Talentutland grant, 2026–2028</li>
+            <li><strong>Research Affiliate</strong>, SETI Institute</li>
+            <li><strong>Data modelling</strong> for NASA's MUSE mission</li>
+          </ul>
+        </div>
+      </div>
+      <figure class="portrait" style="margin:0">
+        <img src="images/portrait.jpg" alt="Souvik Bose in the snow below the Sphinx Observatory at Jungfraujoch" width="880" height="1100">
+      </figure>
+    </div>
+  </section>
+
+  <section class="featured" id="featured">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Featured by NASA Science · 2024</p>
+        <h2>What helps heat the roots of solar “moss”?</h2>
+        <p>NASA's write-up of our Nature Astronomy study, which combined IRIS and Hi-C 2.1 observations with a 3D radiative-MHD simulation to show that heating in active-region plage is consistent with the dissipation of electric currents from magnetic braiding.</p>
+      </div>
+      <a class="btn ext" href="https://science.nasa.gov/science-research/heliophysics/nasa-observations-find-what-helps-heat-roots-of-moss-on-sun/" target="_blank" rel="noopener">Read the NASA feature</a>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap about-grid">
+      <div>
+        <p class="eyebrow">About</p>
+        <p class="q" style="margin-top:12px">How does the Sun's atmosphere become so hot, and what can its <em>smallest structures</em> tell us about the physics at work?</p>
+        <div class="prose" style="margin-top:28px">
+          <p>I study the solar chromosphere and corona using coordinated observations from IRIS, SDO, Hinode and the Swedish 1-m Solar Telescope. By bringing those measurements together with radiative magnetohydrodynamic simulations such as Bifrost, I investigate how magnetic fields shape the atmosphere and how energy moves through it.</p>
+          <p>Alongside solar physics, I work on machine learning for scientific imaging: instrument calibration, image translation, uncertainty-aware reconstruction and anomaly detection. I lead data-modelling work for NASA's MUSE mission, which launches in 2027.</p>
+          <p>I completed my PhD at the University of Oslo in 2021 with a thesis on spicules and mass flows, which the International Astronomical Union named the best PhD thesis of the year in solar and heliospheric physics. I then spent nearly four years as a Research Scientist at the Lockheed Martin Solar &amp; Astrophysics Laboratory in Palo Alto before returning to Oslo in 2026 as a principal investigator.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Research</p>
+          <h2>From the fine structure of the solar atmosphere to the methods that help us see it</h2>
+        </div>
+      </div>
+      <div class="themes">
+        <article class="theme">
+          <h3>Heating the chromosphere and corona</h3>
+          <p>How magnetic structure and electric currents translate into heating across atmospheric layers. Our Nature Astronomy study found that chromospheric heating and transition-region emission in plage correlate on scales of a few hundred kilometres, matching a simulation in which braided current sheets dissipate.</p>
+          <a class="link ext" href="https://doi.org/10.1038/s41550-024-02241-8" target="_blank" rel="noopener">Bose et al. 2024, Nature Astronomy</a>
+        </article>
+        <article class="theme">
+          <h3>Spicules and mass flows</h3>
+          <p>Following small, rapidly evolving jets to understand how mass and energy move between layers: their multi-thermal downflows, their formation in Ca II K and Mg II k, and whether they leave a signature at million-degree temperatures.</p>
+          <a class="link ext" href="https://doi.org/10.3847/2041-8213/adc30d" target="_blank" rel="noopener">Bose et al. 2025, ApJ Letters</a>
+        </article>
+        <article class="theme">
+          <h3>Small-scale magnetism and the corona</h3>
+          <p>What the chromosphere underneath coronal bright points looks like, how flux emergence sets off chains of energetic events, and where energy release localises within magnetic flux tubes.</p>
+          <a class="link ext" href="https://doi.org/10.3847/1538-4357/acb544" target="_blank" rel="noopener">Bose et al. 2023, ApJ</a>
+        </article>
+        <article class="theme">
+          <h3>Machine learning for solar observations</h3>
+          <p>Image translation, autocalibration of SDO/AIA, uncertainty-aware reconstruction, diffusion-based super-resolution and normalising-flow anomaly detection, with an emphasis on knowing when a model's output can be trusted. This feeds directly into the MUSE mission pipelines.</p>
+          <a class="link" href="#software">Software and methods</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="interpretability">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Interpretability research</p>
+          <h2>Understanding what language models learn, layer by layer</h2>
+        </div>
+      </div>
+      <div class="about-grid">
+        <div class="prose">
+          <p>Alongside solar physics, I do research in AI safety and mechanistic interpretability. In 2026 I was selected for the Spring cohort of SPAR, the Supervised Program for Alignment Research, from around 2,500 applicants, working under the supervision of Yuxiao Li.</p>
+          <p>My SPAR project, SelectiveLoRA, asks where in a language model fine-tuning should happen. I compare LoRA adapters placed on all layers, on late layers only, and on randomly chosen layers, and measure both what the model gains on the target task and what it forgets elsewhere. The experiments show clear catastrophic forgetting under non-selective fine-tuning, and preliminary results indicate that instruction tuning changes which placement strategy works best.</p>
+          <p>I also build and analyse small transformer models to study attention circuits directly, using QK and OV matrices, head ablations and visualisation. The questions are close to the ones I ask of solar data: what a model has actually learned, and when its output can be trusted.</p>
+        </div>
+        <dl class="facts">
+          <div><dt>Programme</dt><dd>SPAR, Spring 2026 cohort<span class="sub">Selected from about 2,500 applicants</span></dd></div>
+          <div><dt>Project</dt><dd>SelectiveLoRA<span class="sub">Layer specialisation and catastrophic forgetting in parameter-efficient fine-tuning</span></dd></div>
+          <div><dt>Models</dt><dd>Gemma-2-2B · Qwen2.5-1.5B · Llama-3.1-8B<span class="sub">Base and instruction-tuned variants</span></dd></div>
+          <div><dt>Evaluation</dt><dd>GSM8K · MMLU · HellaSwag · HumanEval · MATH<span class="sub">Sparse-autoencoder analysis with Gemma Scope</span></dd></div>
+          <div><dt>Mentor</dt><dd>Yuxiao Li</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="publications">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Selected publications</p>
+          <h2>First-author work, chosen for what each paper adds</h2>
+        </div>
+        <div class="aside">
+          <a class="link ext" href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Bose%2C%20Souvik%22&sort=date%20desc" target="_blank" rel="noopener">All papers on ADS</a>
+          <a class="link ext" href="https://scholar.google.com/citations?user=CzPCNkcAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+          <a class="link ext" href="https://orcid.org/0000-0002-2180-1013" target="_blank" rel="noopener">ORCID</a>
+        </div>
+      </div>
+      <ol class="pubs">
+        <li class="pub">
+          <div class="year">2025</div>
+          <div>
+            <h3><a href="https://doi.org/10.3847/2041-8213/adc30d" target="_blank" rel="noopener">On the million-degree signature of spicules</a></h3>
+            <p class="meta"><strong>S. Bose</strong>, J. Joshi, P. Testa, B. De Pontieu · <span class="venue">The Astrophysical Journal Letters</span> 983, L7</p>
+            <p class="why">Coordinated IRIS and SDO/AIA observations probe whether spicules are connected to emission from plasma at coronal temperatures.</p>
+            <div class="links"><a href="https://doi.org/10.3847/2041-8213/adc30d" target="_blank" rel="noopener">DOI</a></div>
+          </div>
+        </li>
+        <li class="pub">
+          <div class="year">2024</div>
+          <div>
+            <span class="flag">Featured by NASA Science</span>
+            <h3><a href="https://doi.org/10.1038/s41550-024-02241-8" target="_blank" rel="noopener">Chromospheric and coronal heating in an active region plage by dissipation of currents from braiding</a></h3>
+            <p class="meta"><strong>S. Bose</strong>, B. De Pontieu, V. Hansteen, A. Sainz Dalda, S. Savage, et al. · <span class="venue">Nature Astronomy</span> 8, 697–705</p>
+            <p class="why">High-resolution observations and a 3D radiative-MHD simulation connect heating across atmospheric layers, providing evidence compatible with the dissipation of braided magnetic currents.</p>
+            <div class="links">
+              <a href="https://doi.org/10.1038/s41550-024-02241-8" target="_blank" rel="noopener">DOI</a>
+              <a href="https://ui.adsabs.harvard.edu/abs/2024NatAs...8..697B" target="_blank" rel="noopener">ADS</a>
+              <a href="https://arxiv.org/abs/2211.08579" target="_blank" rel="noopener">arXiv</a>
+              <a href="https://science.nasa.gov/science-research/heliophysics/nasa-observations-find-what-helps-heat-roots-of-moss-on-sun/" target="_blank" rel="noopener">NASA feature</a>
+            </div>
+          </div>
+        </li>
+        <li class="pub">
+          <div class="year">2023</div>
+          <div>
+            <h3><a href="https://doi.org/10.3847/1538-4357/acb544" target="_blank" rel="noopener">The chromosphere underneath a coronal bright point</a></h3>
+            <p class="meta"><strong>S. Bose</strong>, D. Nóbrega-Siverio, B. De Pontieu, L. Rouppe van der Voort · <span class="venue">The Astrophysical Journal</span> 944, 171</p>
+            <p class="why">Hβ and Fe I observations from the SST, combined with SDO, show spicules at the footpoints of a coronal bright point aligning with its loops and driving transient coronal brightenings.</p>
+            <div class="links">
+              <a href="https://doi.org/10.3847/1538-4357/acb544" target="_blank" rel="noopener">DOI</a>
+              <a href="https://arxiv.org/abs/2301.08596" target="_blank" rel="noopener">arXiv</a>
+            </div>
+          </div>
+        </li>
+        <li class="pub">
+          <div class="year">2021</div>
+          <div>
+            <h3><a href="https://doi.org/10.1051/0004-6361/202141404" target="_blank" rel="noopener">Evidence of the multi-thermal nature of spicular downflows: impact on solar atmospheric heating</a></h3>
+            <p class="meta"><strong>S. Bose</strong>, L. Rouppe van der Voort, J. Joshi, V. M. J. Henriques, D. Nóbrega-Siverio, J. Martínez-Sykora, B. De Pontieu · <span class="venue">Astronomy &amp; Astrophysics</span> 654, A51</p>
+            <p class="why">Downflows associated with spicules are seen simultaneously across chromospheric, transition-region and coronal passbands, pointing to a multi-thermal return flow.</p>
+            <div class="links"><a href="https://doi.org/10.1051/0004-6361/202141404" target="_blank" rel="noopener">DOI</a><a href="https://ui.adsabs.harvard.edu/abs/2021A%26A...654A..51B" target="_blank" rel="noopener">ADS</a></div>
+          </div>
+        </li>
+        <li class="pub">
+          <div class="year">2021</div>
+          <div>
+            <h3><a href="https://doi.org/10.1051/0004-6361/202040014" target="_blank" rel="noopener">Spicules and downflows in the solar chromosphere</a></h3>
+            <p class="meta"><strong>S. Bose</strong>, J. Joshi, V. M. J. Henriques, L. Rouppe van der Voort · <span class="venue">Astronomy &amp; Astrophysics</span> 647, A147</p>
+            <p class="why">A statistical study using k-means clustering of SST and IRIS spectra to characterise spicules and the downflows that follow them.</p>
+            <div class="links"><a href="https://doi.org/10.1051/0004-6361/202040014" target="_blank" rel="noopener">DOI</a><a href="https://ui.adsabs.harvard.edu/abs/2021A%26A...647A.147B" target="_blank" rel="noopener">ADS</a></div>
+          </div>
+        </li>
+        <li class="pub">
+          <div class="year">2019</div>
+          <div>
+            <h3><a href="https://doi.org/10.1051/0004-6361/201936617" target="_blank" rel="noopener">Characterization and formation of on-disk spicules in the Ca II K and Mg II k spectral lines</a></h3>
+            <p class="meta"><strong>S. Bose</strong>, V. M. J. Henriques, J. Joshi, L. Rouppe van der Voort · <span class="venue">Astronomy &amp; Astrophysics</span> 631, L5</p>
+            <p class="why">The first detailed look at on-disk spicules in Ca II K with CHROMIS, paired with IRIS Mg II k, and their spectral signatures.</p>
+            <div class="links"><a href="https://doi.org/10.1051/0004-6361/201936617" target="_blank" rel="noopener">DOI</a><a href="https://ui.adsabs.harvard.edu/abs/2019A%26A...631L...5B" target="_blank" rel="noopener">ADS</a></div>
+          </div>
+        </li>
+      </ol>
+      <details class="allpubs" id="all-publications">
+        <summary>All publications</summary>
+        <p class="status" id="pubs-status">From my ORCID record, as of 10 November 2026.</p>
+        <ol id="pubs-list"></ol>
+      </details>
+      <div class="pubs-foot">
+        <span>Full record: more than 20 refereed papers, nine as first author, two in Nature Astronomy.</span>
+        <a class="link ext" href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Bose%2C%20Souvik%22&sort=date%20desc" target="_blank" rel="noopener">Complete list on ADS</a>
+        <a class="link ext" href="https://arxiv.org/abs/2110.10656" target="_blank" rel="noopener">PhD thesis (2021)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="software">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Software &amp; methods</p>
+          <h2>Open code from the research</h2>
+        </div>
+        <div class="aside"><a class="link ext" href="https://github.com/souvikita" target="_blank" rel="noopener">All repositories on GitHub</a></div>
+      </div>
+      <div class="repos">
+        <article class="repo">
+          <p class="eyebrow">Observations + simulations</p>
+          <h3>MUSE model validation</h3>
+          <p>Compares SDO/AIA quiet-Sun intensity distributions against synthetic Bifrost observations in the 171, 131, 193 and 211 Å channels, using ECDFs and non-parametric tests, as part of MUSE data modelling.</p>
+          <p class="path">souvikita/muse_validation_pipeline</p>
+          <a class="link ext" href="https://github.com/souvikita/muse_validation_pipeline" target="_blank" rel="noopener">View repository</a>
+        </article>
+        <article class="repo">
+          <p class="eyebrow">Scientific machine learning</p>
+          <h3>Uncertainty-aware reconstruction</h3>
+          <p>A self-contained PyTorch workflow that reconstructs noisy, compressed or masked images with a convolutional autoencoder and returns per-pixel epistemic uncertainty via Monte Carlo dropout. Runs on CPU, MPS or CUDA.</p>
+          <p class="path">souvikita/UQ_reconstruction_sample</p>
+          <a class="link ext" href="https://github.com/souvikita/UQ_reconstruction_sample" target="_blank" rel="noopener">View repository</a>
+        </article>
+        <article class="repo">
+          <h3 style="order:1">Detecting solar spicules</h3>
+          <p class="eyebrow" style="order:0">Feature detection</p>
+          <p style="order:2">Classical machine-learning methods for finding small, dynamic jets in high-resolution SST and IRIS observations, developed alongside the spicule papers.</p>
+          <p class="path" style="order:3">souvikita/Detecting-spicules</p>
+          <a class="link ext" style="order:4" href="https://github.com/souvikita/Detecting-spicules" target="_blank" rel="noopener">View repository</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="background">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Background</p>
+          <h2>Experience, education and recognition</h2>
+        </div>
+        <div class="aside"><a class="link ext" href="https://www.mn.uio.no/astro/personer/vit/souvikb/index.html" target="_blank" rel="noopener">University profile</a></div>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="grant">
+            <p class="eyebrow">Principal investigator · 2026–2028</p>
+            <h3>Research Council of Norway, Talentutland grant</h3>
+            <p>Project 360813 at the Institute of Theoretical Astrophysics, University of Oslo, awarded in November 2025 to support research on chromospheric and coronal physics with MUSE and IRIS observations.</p>
+          </div>
+          <ol class="timeline">
+            <li>
+              <div class="when">2026 — present</div>
+              <div>
+                <h3>Researcher</h3>
+                <p class="org">Institute of Theoretical Astrophysics &amp; Rosseland Centre for Solar Physics, University of Oslo</p>
+                <p class="desc">Principal investigator of the Research Council of Norway grant above. Research Affiliate at the SETI Institute.</p>
+              </div>
+            </li>
+            <li>
+              <div class="when">2022 — 2025</div>
+              <div>
+                <h3>Research Scientist</h3>
+                <p class="org">Lockheed Martin Solar &amp; Astrophysics Laboratory, Palo Alto (SETI Institute affiliation from 2024)</p>
+                <p class="desc">Solar observations, simulations and mission data modelling. IRIS and SDO observing programs and spacecraft command inputs; ML-driven pipelines for MUSE covering noise modelling, compression and uncertainty quantification; co-investigator on the SNIFS sounding rocket.</p>
+              </div>
+            </li>
+            <li>
+              <div class="when">2021 — 2022</div>
+              <div>
+                <h3>Postdoctoral Researcher</h3>
+                <p class="org">Rosseland Centre for Solar Physics, University of Oslo</p>
+                <p class="desc">High-resolution imaging combined with simulations; radiative transfer computations on the Betzy and Pleiades supercomputers.</p>
+              </div>
+            </li>
+            <li>
+              <div class="when">2019</div>
+              <div>
+                <h3>Researcher, NASA Frontier Development Lab</h3>
+                <p class="org">NASA Ames Research Center</p>
+                <p class="desc">CNN-based image restoration and encoder–decoder UV image synthesis for SDO; co-authored a public PyTorch pipeline and received the NASA Award of Merit.</p>
+              </div>
+            </li>
+            <li>
+              <div class="when">2021</div>
+              <div>
+                <h3>PhD, Solar Astrophysics (with distinction)</h3>
+                <p class="org">University of Oslo · advisor Luc Rouppe van der Voort</p>
+                <p class="desc">Thesis: <em>On the Dynamics of Spicules and Mass Flows in the Solar Atmosphere</em>. IAU PhD Prize, Division E (Sun and Heliosphere), 2022.</p>
+              </div>
+            </li>
+            <li>
+              <div class="when">Earlier</div>
+              <div>
+                <h3>M.Tech., Astronomical Instrumentation</h3>
+                <p class="org">Indian Institute of Astrophysics, Bengaluru · first class with honours</p>
+                <h3 style="margin-top:12px">B.E., Electronics &amp; Communication Engineering</h3>
+                <p class="org">University of Burdwan, India · first class with honours</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div>
+          <div class="side-block">
+            <h3>Awards &amp; honours</h3>
+            <ul class="side-list">
+              <li><span class="when">2024</span><span>NASA Robert H. Goddard Exceptional Science Achievement Award<span class="sub">SDO team</span></span></li>
+              <li><span class="when">Co-I</span><span>NASA Heliophysics Supporting Research grant<span class="sub">Formation and heating of coronal loops</span></span></li>
+              <li><span class="when">2024</span><span>AAS/SPD Thomas Metcalf Travel Award<span class="sub">Hinode/IRIS meeting, Bozeman</span></span></li>
+              <li><span class="when">2022</span><span>IAU PhD Prize, Division E: Sun and Heliosphere<span class="sub">Best thesis of 2021; prize lecture at the XXXI IAU General Assembly, Busan</span></span></li>
+              <li><span class="when">2020</span><span>Fellow of the Royal Astronomical Society</span></li>
+              <li><span class="when">2019</span><span>NASA Award of Merit<span class="sub">AI for space exploration, NASA Frontier Development Lab</span></span></li>
+            </ul>
+          </div>
+          <div class="side-block">
+            <h3>Observing &amp; missions</h3>
+            <ul class="side-list">
+              <li><span class="when">IRIS</span><span>Science planner, 2–3 weeks per year since 2019</span></li>
+              <li><span class="when">SST</span><span>Observer at the Swedish 1-m Solar Telescope, La Palma, since 2018</span></li>
+              <li><span class="when">MUSE</span><span>Data-modelling and ML pipelines for the Multi-slit Solar Explorer (launch 2027)</span></li>
+              <li><span class="when">SNIFS</span><span>Co-investigator, Solar eruptioN Integral Field Spectrograph sounding rocket</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="activity">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Talks, teaching &amp; service</p>
+          <h2>Beyond the papers</h2>
+        </div>
+      </div>
+      <div class="activity">
+        <div>
+          <h3>Selected talks</h3>
+          <ul>
+            <li>Invited review on active-region heating, joint MUSE/IRIS science team meeting, Mountain View <span class="sub">· 2025</span></li>
+            <li>Invited talk, Asia-Pacific Conference on Plasma Physics, Fukuoka <span class="sub">· 2025</span></li>
+            <li>Invited talk on solar spicules, COSPAR General Assembly, Busan <span class="sub">· 2024</span></li>
+            <li>Invited PhD prize lecture, XXXI IAU General Assembly, Busan <span class="sub">· 2022</span></li>
+            <li>Invited seminars, KASI and Seoul National University; Indian Institute of Astrophysics <span class="sub">· 2022</span></li>
+            <li>Hinode/IRIS meetings, Prague and Bozeman <span class="sub">· 2022, 2024</span></li>
+            <li>Talk at Google, Mountain View, on AI for space exploration <span class="sub">· 2019</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Teaching &amp; mentoring</h3>
+          <ul>
+            <li>Lectures on computational radiative transfer, Winter School on Concepts in Solar Physics, NIT Delhi <span class="sub">· 2023</span></li>
+            <li>Taught the RH 1.5D radiative transfer code, AST 5210 Stellar Atmospheres, University of Oslo</li>
+            <li>Teaching assistant, AST 2210 Observational Astronomy, University of Oslo</li>
+            <li>Mentored a PhD student at LASP, University of Colorado Boulder, through her 2024 defence</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Service</h3>
+          <ul>
+            <li>Referee since 2020 for Nature Astronomy, Astronomy &amp; Astrophysics, The Astrophysical Journal and Letters, Solar Physics, Monthly Notices and Frontiers</li>
+            <li>Invited review for Publications of the Astronomical Society of Japan marking Hinode's 20th anniversary</li>
+            <li>Member of the SDO science team and IRIS planning team</li>
+            <li>Public talks and outreach on the Sun for students and general audiences</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block contact" id="contact">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>For research conversations, collaborations or questions about my work</h2>
+        <p class="lead">I'm based at the Institute of Theoretical Astrophysics in Oslo and happy to hear from students, collaborators and anyone curious about the Sun.</p>
+        <div class="email">
+          <code id="email-text">souvik.bose@astro.uio.no</code>
+          <button type="button" id="copy-email" aria-live="polite">Copy address</button>
+        </div>
+        <p class="mono" style="margin-top:18px">Svein Rosselands hus, Sem Sælands vei 13, 0371 Oslo</p>
+      </div>
+      <ul class="links-grid">
+        <li><a class="ext" href="https://scholar.google.com/citations?user=CzPCNkcAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar <span class="what">citations</span></a></li>
+        <li><a class="ext" href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Bose%2C%20Souvik%22&sort=date%20desc" target="_blank" rel="noopener">NASA ADS <span class="what">full publication list</span></a></li>
+        <li><a class="ext" href="https://orcid.org/0000-0002-2180-1013" target="_blank" rel="noopener">ORCID <span class="what">0000-0002-2180-1013</span></a></li>
+        <li><a class="ext" href="https://github.com/souvikita" target="_blank" rel="noopener">GitHub <span class="what">souvikita</span></a></li>
+        <li><a class="ext" href="https://www.linkedin.com/in/souvikb-solar/" target="_blank" rel="noopener">LinkedIn <span class="what">souvikb-solar</span></a></li>
+        <li><a class="ext" href="https://www.mn.uio.no/astro/personer/vit/souvikb/index.html" target="_blank" rel="noopener">University of Oslo <span class="what">staff profile</span></a></li>
+        <li><a class="ext" href="https://www.seti.org/people/souvik-bose/" target="_blank" rel="noopener">SETI Institute <span class="what">affiliate profile</span></a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Souvik Bose · Oslo</span>
+    <span>Solar physics · Scientific computing</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Ca II K-like line profile: broad absorption with a double-peaked emission core and central reversal.
+  function profile(x) {
+    var A = Math.exp(-(x * x) / (2 * 0.35 * 0.35));
+    var E = 0.36 * Math.exp(-(x * x) / (2 * 0.085 * 0.085));
+    var R = 0.26 * Math.exp(-(x * x) / (2 * 0.026 * 0.026));
+    return 1 - 0.9 * A + E - R;
+  }
+  function drawSpectrum() {
+    var svg = document.getElementById('spectrum-svg');
+    if (!svg) return;
+    var W = 1000, H = 56, pad = 6, pts = [];
+    for (var i = 0; i <= 400; i++) {
+      var x = -1 + (2 * i) / 400;
+      var y = profile(x);
+      pts.push([(i / 400) * W, pad + (1 - y) * (H - 2 * pad)]);
+    }
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    var fill = d + ' L' + W + ' ' + H + ' L0 ' + H + ' Z';
+    var ns = 'http://www.w3.org/2000/svg';
+    var area = document.createElementNS(ns, 'path');
+    area.setAttribute('d', fill); area.setAttribute('fill', 'currentColor'); area.setAttribute('opacity', '0.06');
+    var line = document.createElementNS(ns, 'path');
+    line.setAttribute('d', d); line.setAttribute('fill', 'none'); line.setAttribute('stroke', 'var(--accent)'); line.setAttribute('stroke-width', '1.6'); line.setAttribute('vector-effect', 'non-scaling-stroke');
+    var core = document.createElementNS(ns, 'line');
+    core.setAttribute('x1', W / 2); core.setAttribute('x2', W / 2); core.setAttribute('y1', 0); core.setAttribute('y2', H);
+    core.setAttribute('stroke', 'currentColor'); core.setAttribute('stroke-dasharray', '2 4'); core.setAttribute('opacity', '0.35'); core.setAttribute('vector-effect', 'non-scaling-stroke');
+    svg.style.color = getComputedStyle(document.body).getPropertyValue('--muted') || '#888';
+    svg.appendChild(area); svg.appendChild(core); svg.appendChild(line);
+  }
+  function drawPortraitLines() {
+    var svg = document.getElementById('portrait-lines');
+    if (!svg) return;
+    var ns = 'http://www.w3.org/2000/svg';
+    // Stacked line profiles, like a spectrogram read row by row.
+    for (var r = 0; r < 14; r++) {
+      var y0 = 40 + r * 32, amp = 22, pts = [];
+      var w = 0.22 + 0.12 * Math.sin(r * 1.3);
+      for (var i = 0; i <= 120; i++) {
+        var x = -1 + (2 * i) / 120;
+        var A = Math.exp(-(x * x) / (2 * w * w));
+        var E = 0.36 * Math.exp(-(x * x) / (2 * 0.085 * 0.085));
+        var R = 0.26 * Math.exp(-(x * x) / (2 * 0.03 * 0.03));
+        var y = 1 - 0.9 * A + E - R;
+        pts.push(((i / 120) * 400).toFixed(1) + ',' + (y0 - (y - 0.5) * amp).toFixed(1));
+      }
+      var p = document.createElementNS(ns, 'polyline');
+      p.setAttribute('points', pts.join(' ')); p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', r === 6 ? 'var(--accent)' : '#ffffff'); p.setAttribute('stroke-width', r === 6 ? '1.6' : '0.9');
+      p.setAttribute('vector-effect', 'non-scaling-stroke');
+      svg.appendChild(p);
+    }
+  }
+  function copyEmail() {
+    var btn = document.getElementById('copy-email'), code = document.getElementById('email-text');
+    if (!btn || !code) return;
+    btn.addEventListener('click', function () {
+      var text = code.textContent;
+      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy address'; }, 1600); };
+      var fallback = function () {
+        try { var range = document.createRange(); range.selectNodeContents(code); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); btn.textContent = 'Selected — press copy'; } catch (e) {}
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+    });
+  }
+  drawSpectrum(); drawPortraitLines(); copyEmail();
+  var y = document.getElementById('year'); if (y) y.textContent = String(new Date().getFullYear());
+})();
+</script>
+<script>
+(function () {
+  var ORCID = '0000-0002-2180-1013';
+  var SNAPSHOT = [["2026", "Evidence for plasmoid formation related to a hot UV burst in the solar atmosphere", "Astronomy & Astrophysics", "10.1051/0004-6361/202660799"], ["2025", "Spectroscopic observations of solar flare pulsations driven by oscillatory magnetic reconnection", "Nature Astronomy", "10.1038/s41550-025-02706-4"], ["2025", "On the Million-degree Signature of Spicules", "The Astrophysical Journal Letters", "10.3847/2041-8213/adc30d"], ["2024", "The Solar EruptioN Integral Field Spectrograph", "Solar Physics", "10.1007/s11207-024-02367-y"], ["2024", "Comprehensive Synthesis of Magnetic Tornado: Cospatial Incidence of Chromospheric Swirls and Extreme-ultraviolet Brightening", "The Astrophysical Journal Letters", "10.3847/2041-8213/ad5a0e"], ["2024", "Small-scale magnetic flux emergence preceding a chain of energetic solar atmospheric events", "Astronomy & Astrophysics", "10.1051/0004-6361/202348894"], ["2024", "Chromospheric and coronal heating in an active region plage by dissipation of currents from braiding", "Nature Astronomy", "10.1038/s41550-024-02241-8"], ["2023", "Spicules in IRIS Mg ii Observations: Automated Identification", "The Astrophysical Journal", "10.3847/1538-4357/acbe3f"], ["2023", "Numerical Simulations and Observations of Mg ii in the Solar Chromosphere", "The Astrophysical Journal", "10.3847/1538-4357/acb33c"], ["2023", "The Chromosphere Underneath a Coronal Bright Point", "The Astrophysical Journal", "10.3847/1538-4357/acb544"], ["2022", "Properties of shock waves in the quiet-Sun chromosphere", "Astronomy & Astrophysics", "10.1051/0004-6361/202244332"], ["2022", "Exploring the Limits of Synthetic Creation of Solar EUV Images via Image-to-image Translation", "The Astrophysical Journal", "10.3847/1538-4357/ac867b"], ["2021", "Evidence of the multi-thermal nature of spicular downflows", "Astronomy & Astrophysics", "10.1051/0004-6361/202141404"], ["2021", "Multichannel autocalibration for the Atmospheric Imaging Assembly using machine learning", "Astronomy & Astrophysics", "10.1051/0004-6361/202040051"], ["2021", "Signatures of ubiquitous magnetic reconnection in the deep atmosphere of sunspot penumbrae", "Astronomy & Astrophysics", "10.1051/0004-6361/202040171"], ["2021", "Spicules and downflows in the solar chromosphere", "Astronomy & Astrophysics", "10.1051/0004-6361/202040014"], ["2020", "High-resolution observations of the solar photosphere, chromosphere, and transition region", "Astronomy & Astrophysics", "10.1051/0004-6361/202038732"], ["2019", "Characterization and formation of on-disk spicules in the Ca II K and Mg II k spectral lines", "Astronomy & Astrophysics", "10.1051/0004-6361/201936617"], ["2019", "Semi-empirical model atmospheres for the chromosphere of the sunspot penumbra and umbral flashes", "Astronomy & Astrophysics", "10.1051/0004-6361/201935289"], ["2018", "On the Variability of the Solar Mean Magnetic Field: Contributions from Various Magnetic Features on the Surface of the Sun", "The Astrophysical Journal", "10.3847/1538-4357/aaccf1"], ["2018", "Role of the background regimes towards the Solar Mean Magnetic Field (SMMF)", "Proceedings of the International Astronomical Union", "10.1017/S1743921318001758"]];
+  var list = document.getElementById('pubs-list'), status = document.getElementById('pubs-status');
+  if (!list) return;
+  function render(rows) {
+    list.textContent = '';
+    rows.forEach(function (r) {
+      var li = document.createElement('li');
+      var y = document.createElement('span'); y.className = 'year'; y.textContent = r[0] || '';
+      var body = document.createElement('span');
+      var t = r[3] ? document.createElement('a') : document.createElement('span');
+      if (r[3]) { t.href = 'https://doi.org/' + r[3]; t.target = '_blank'; t.rel = 'noopener'; }
+      t.textContent = r[1] || '';
+      var j = document.createElement('span'); j.className = 'j'; j.textContent = r[2] || '';
+      body.appendChild(t); body.appendChild(j); li.appendChild(y); li.appendChild(body); list.appendChild(li);
+    });
+  }
+  render(SNAPSHOT);
+  // Live refresh from the public ORCID API. If it fails (offline, blocked), the built-in list above stays.
+  fetch('https://pub.orcid.org/v3.0/' + ORCID + '/works', { headers: { Accept: 'application/json' } })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (j) {
+      var rows = (j.group || []).map(function (g) {
+        var w = (g['work-summary'] || [])[0] || {};
+        var ids = ((g['external-ids'] || {})['external-id'] || []);
+        var doi = ids.filter(function (e) { return e['external-id-type'] === 'doi'; })[0];
+        var d = w['publication-date'] || {};
+        return [d.year && d.year.value, w.title && w.title.title && w.title.title.value, w['journal-title'] && w['journal-title'].value, doi && doi['external-id-value'], (d.month && d.month.value) || '00'];
+      }).filter(function (r) { return r[1]; });
+      if (!rows.length) return;
+      rows.sort(function (a, b) { return (b[0] + b[4]).localeCompare(a[0] + a[4]); });
+      render(rows);
+      if (status) status.textContent = 'Loaded live from my ORCID record: ' + rows.length + ' works.';
+    })
+    .catch(function () {});
+})();
+</script>
+
+</body>
+</html>
